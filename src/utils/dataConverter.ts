@@ -88,10 +88,7 @@ export const convertPairFactor = (pairFactor: IPriceImpact.PairFactorsStruct): P
   exemptAfterProtectionCloseFactor: pairFactor.exemptAfterProtectionCloseFactor,
 });
 
-export const convertTrade = (
-  trade: ITradingStorage.TradeStruct,
-  collaterals: CollateralConfig[]
-): Trade => {
+export const convertTrade = (trade: ITradingStorage.TradeStruct, collaterals: CollateralConfig[]): Trade => {
   const { long, user } = trade;
   const collateralIndex = Number(trade.collateralIndex);
   return {
@@ -223,8 +220,7 @@ export const convertGroupBorrowingFees = (pairParams: {
 }): BorrowingFee.Group[] => pairParams?.groups.map((pairParam) => convertGroupBorrowingFee(pairParam));
 
 export const convertGroupBorrowingFee = (
-  pairParams: IBorrowingFees.BorrowingDataStruct & { oi: 
-    IBorrowingFees.OpenInterestStruct }
+  pairParams: IBorrowingFees.BorrowingDataStruct & { oi: IBorrowingFees.OpenInterestStruct }
 ): BorrowingFee.Group => ({
   oi: {
     long: Number(pairParams.oi.long) / 1e10,
@@ -258,13 +254,14 @@ export const convertOiWindowsSettings = (
 });
 
 export const convertCollateralConfig = (
-  collateral: Omit<ITradingStorage.CollateralStruct, "__placeholder"> & { decimals: BigNumberish }
+  collateral: Omit<ITradingStorage.CollateralStruct, "__placeholder"> & { decimals: BigNumberish; symbol: string }
 ): CollateralConfig => ({
   collateral: collateral.collateral as string,
   isActive: collateral.isActive,
   precision: Number(collateral.precision),
   precisionDelta: Number(collateral.precisionDelta),
   decimals: Number(collateral.decimals),
+  symbol: collateral.symbol,
 });
 
 export const convertFeeTiers = (feeTiers: {
@@ -298,5 +295,5 @@ export const convertTraderFeeTiers = (traderFeeTiers: {
   outboundPoints: Number(traderFeeTiers.outboundPoints) / 1e18,
   lastDayUpdatedPoints: Number(traderFeeTiers.lastDayUpdatedPoints) / 1e18,
   expiredPoints: traderFeeTiers.expiredPoints.map((point) => Number(point) / 1e18),
-  unclaimedPoints: Number(traderFeeTiers.inboundPoints) / 1e18
+  unclaimedPoints: Number(traderFeeTiers.inboundPoints) / 1e18,
 });

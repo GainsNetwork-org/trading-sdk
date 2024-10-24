@@ -190,22 +190,27 @@ export class TradingSDK {
     });
 
     // collateral configs
-    const tokenDecimals = await Promise.all([
-      ...collaterals.map(({ collateral }) => {
+    const tokenData = await Promise.all(
+      collaterals.map(({ collateral }) => {
         const token = new Contract(collateral, ERC20_ABI, this.runner);
-        return token.decimals() as Promise<bigint>;
-      }),
-    ]);
-    const collateralsWithDecimals = collaterals.map(({ collateral, precision, precisionDelta, isActive }, index) => {
-      return {
-        collateral,
-        decimals: tokenDecimals[index],
-        isActive,
-        precision,
-        precisionDelta,
-      };
-    });
-    const collateralConfigs = collateralsWithDecimals.map(convertCollateralConfig);
+        return Promise.all([token.decimals() as Promise<bigint>, token.symbol() as Promise<string>]);
+      })
+    );
+
+    const collateralsWithDecimalsAndSymbols = collaterals.map(
+      ({ collateral, precision, precisionDelta, isActive }, index) => {
+        const [decimals, symbol] = tokenData[index];
+        return {
+          collateral,
+          decimals,
+          symbol,
+          isActive,
+          precision,
+          precisionDelta,
+        };
+      }
+    );
+    const collateralConfigs = collateralsWithDecimalsAndSymbols.map(convertCollateralConfig);
 
     this.lastRefreshedTs = Date.now();
     this.state = {
