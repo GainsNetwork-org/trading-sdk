@@ -159,6 +159,8 @@ export async function buildOpenTradeTx(gnsDiamond: GNSDiamond, args: OpenTradeTx
     isOpen: true,
     collateralIndex: args.collateralIndex,
     tradeType: args.tradeType,
+    isCounterTrade: false,
+    positionSizeToken: "0",
     __placeholder: "0",
   };
   const maxSlippage = Math.floor(args.maxSlippage * 1e3);
