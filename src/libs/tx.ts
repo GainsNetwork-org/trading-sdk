@@ -159,7 +159,7 @@ export async function buildOpenTradeTx(gnsDiamond: GNSDiamond, args: OpenTradeTx
     isOpen: true,
     collateralIndex: args.collateralIndex,
     tradeType: args.tradeType,
-    isCounterTrade: false,
+    isCounterTrade: args?.isCounterTrade || false,
     positionSizeToken: "0",
     __placeholder: "0",
   };

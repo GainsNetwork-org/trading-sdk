@@ -82,6 +82,7 @@ export type OpenTradeTxArgs = {
   collateralIndex: number;
   tradeType: number;
   maxSlippage: number;
+  isCounterTrade?: boolean;
   ref?: string;
 };
 
